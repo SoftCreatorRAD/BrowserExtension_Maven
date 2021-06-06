@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "name": "Maven Analyzer for Zillow/Trulia/Realtor/Redfin",
+  "description": "Maven Analyzer transfer peroperty listings from Zillow/Trulia/Realtor/Redfin to Maven for further analysis and pre-approval.",
+  "homepage_url": "https://maven.loan",
+  "icons": {
+    "16": "img/icon-16.png",
+    "19": "img/icon-19.png",
+    "38": "img/icon-38.png",
+    "48": "img/icon-48.png",
+    "128": "img/icon-128.png"
+  },
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.zillow.com/*",
+        "https://www.realtor.com/*",
+        "https://www.trulia.com/*",
+        "https://www.redfin.com/*",
+        "https://www.redfin.ca/*"
+      ],
+      "css": ["css/mavenloan.css"],
+      "js": ["js/mavenloan.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "browser_action": {
+    "default_icon": {
+      "16": "img/icon-16.png",
+      "19": "img/icon-19.png",
+      "38": "img/icon-38.png",
+      "48": "img/icon-48.png"
+    },
+    "default_title": "Maven Analyzer",
+    "default_popup": "popup.html"
+  },
+  "manifest_version": 2
+}
