@@ -7,24 +7,20 @@ const cardSel = {
   truliaBig: '[data-testid="home-details-summary-container"]',
   zillow: 'article.list-card',
   zillowBig: '#search-detail-lightbox .ds-home-details-chip',
-  redfin: '',
-  redfinBig: '',
-  redfinca: '',
-  redfincaBig: '',
-  realtor: '',
-  realtorBig: '',
+  redfin: '.HomeCard .v2',
+  redfinBig: '.HomeInfoV2',
+  realtor: '[data-testid="property-card"]',
+  realtorBig: '[data-testid="section-listing-summary"]',//'[data-testid="listing-details-id"]',
 }
 const priceSel = {
   trulia: '[data-testid="property-price"]',
   truliaBig: '[data-testid="home-details-sm-lg-xl-price-details"]>h3', // Markup differs when "AgentListings/Other" switched
   zillow: '.list-card-price',
   zillowBig: '.ds-chip .ds-summary-row > span:first-child',
-  redfin: '',
-  redfinBig: '',
-  redfinca: '',
-  redfincaBig: '',
-  realtor: '',
-  realtorBig: '',
+  redfin: '.homecardV2Price',
+  redfinBig: '.price-section',
+  realtor: '[data-label="pc-price"]',
+  realtorBig: '[data-testid="price-section"]>.price',
 }
 
 
@@ -35,24 +31,20 @@ document.addEventListener('DOMContentLoaded', function () {
       truliaBig: '[data-testid="home-details-summary-headline"], [data-testid="home-details-summary-city-state"]',
       zillow: 'address.list-card-addr',
       zillowBig: '#ds-chip-property-address',
-      redfin: '',
-      redfinBig: '',
-      redfinca: '',
-      redfincaBig: '',
-      realtor: '',
-      realtorBig: '',
+      redfin: '.homeAddressV2',
+      redfinBig: 'h1.address',
+      realtor: '[data-label="pc-address"]',
+      realtorBig: '[data-testid="address-section"]',
     }
     const detailsSel = {
       trulia: '[r="xxs"]',
       truliaBig: '[data-testid="facts-list"] > li',
       zillow: '.list-card-details > li',
       zillowBig: '.ds-bed-bath-living-area-container > *',
-      redfin: '',
-      redfinBig: '',
-      redfinca: '',
-      redfincaBig: '',
-      realtor: '',
-      realtorBig: '',
+      redfin: '.HomeStatsV2 > div',
+      redfinBig: '.home-main-stats-variant > div',
+      realtor: '.property-meta > li',
+      realtorBig: '.property-meta > li',
     }
     if (evt.target && evt.target.classList.contains('mavenloan-btn')) {
       let url = 'http://app.maven.loan/api/Custom/Process?actionName=losMaven&wrapResult=false&source=' + domain;
@@ -89,29 +81,28 @@ document.addEventListener('DOMContentLoaded', function () {
       let details = card.querySelectorAll(detailsSel[domain + big]);
       for (let detail of details) {
         let nodeText = detail.textContent.trim();
-        if (nodeText.endsWith("bds") || nodeText.endsWith("bd") || nodeText.endsWith("Beds") || nodeText.endsWith("Bed")) {
+        if (nodeText.endsWith("bds") || nodeText.endsWith("bd") || nodeText.endsWith("Beds") || nodeText.endsWith("Bed") || nodeText.endsWith("bed")) {
           let beds = mavenloanParseNum(detail);
           if (beds > 0 && url.indexOf('&beds=') === -1) {
             url += `&beds=${beds}`;
           }
         }
-        if (nodeText.endsWith("ba") || nodeText.endsWith("Baths") || nodeText.endsWith("Bath")) {
+        if (nodeText.endsWith("ba") || nodeText.endsWith("Baths") || nodeText.endsWith("Bath") || nodeText.endsWith("bath")) {
           let baths = mavenloanParseNum(detail);
           if (baths > 0 && url.indexOf('&baths=') === -1) {
             url += `&baths=${baths}`;
           }
         }
-        if (nodeText.endsWith("sqft") || nodeText.endsWith("Sq. Ft.")) {
+        if (nodeText.endsWith("sqft") || nodeText.endsWith("Sq. Ft.") || nodeText.endsWith("Sq Ft")) {
           let sqft = mavenloanParseNum(detail);
           if (sqft > 0 && url.indexOf('&sqft=') === -1) {
             url += `&sqft=${sqft}`;
           }
         }
       }
-
-      DEBUG && console.log(encodeURI(url));
-      DEBUG && console.log('------------- PREV PRICE: -------------');  // Markup differs when "AgentListings/Other" switched
-      DEBUG && console.log(evt.target.dataset.url);
+      //DEBUG && console.log(encodeURI(url));
+      //DEBUG && console.log(evt.target.dataset.url);
+      DEBUG && console.log(url);
       //window.open(url, 'mavenloan');
       //chrome.runtime.sendMessage(url);
     }
@@ -140,6 +131,8 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     let mainObserver = new MutationObserver(mainMutationCallback);
     mainObserver.observe(propertiesParent, {attributes: false, childList: true, subtree: true});
+
+    // Big card:
     let detailsPopup = document.getElementById("home-detail-lightbox-container");
     let detailsMutationCallback = function (mutations) {
       if (mutations[0].addedNodes.length > 0) {
@@ -176,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let mainObserver = new MutationObserver(mainMutationCallback);
     mainObserver.observe(document, {attributes: false, childList: true, subtree: true});
 
+    // Big card:
     let standalonePage = document.querySelector(cardSel.truliaBig);
     if (standalonePage !== null) {
       mavenloanCreateBtn("trulia", standalonePage, priceSel.truliaBig, "trulia-big");
@@ -185,8 +179,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   else if (window.location.hostname.includes("redfin")) {
-    for (let card of document.querySelectorAll(".HomeCard .bottomV2")) {
-      mavenloanCreateBtn("redfin", card, ".homecardV2Price", ".homeAddressV2", ".HomeStatsV2 > .stats", "redfin-main");
+    for (let card of document.querySelectorAll(cardSel.redfin)) {
+      mavenloanCreateBtn("redfin", card, priceSel.redfin, "redfin-main");
     }
     let mainMutationCallback = function (mutations) {
       for (let mutation of mutations) {
@@ -197,8 +191,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         for (let node of mutation.addedNodes) {
           if (node.nodeType === 1) {
-            for (let card of node.querySelectorAll(".HomeCard .bottomV2, .SimilarHomeCardReact .bottomV2")) {
-              mavenloanCreateBtn("redfin", card, ".homecardV2Price", ".homeAddressV2", ".HomeStatsV2 > .stats", "redfin-main");
+            for (let card of node.querySelectorAll(cardSel.redfin)) { //".HomeCard .bottomV2, .SimilarHomeCardReact .bottomV2"
+              mavenloanCreateBtn("redfin", card, priceSel.redfin, "redfin-main");
             }
           }
         }
@@ -207,24 +201,17 @@ document.addEventListener('DOMContentLoaded', function () {
     let mainObserver = new MutationObserver(mainMutationCallback);
     mainObserver.observe(document, {attributes: false, childList: true, subtree: true});
 
-    let standalonePage = document.querySelector(".HomeInfo");
+    let standalonePage = document.querySelector(cardSel.redfinBig);
     if (standalonePage !== null) {
-      mavenloanCreateBtn(
-        "redfin",
-        standalonePage,
-        ".price",
-        ".address",
-        ".HomeMainStats .info-block",
-        "redfin-big"
-      );
+      mavenloanCreateBtn("redfin", standalonePage, priceSel.redfinBig, "redfin-big");
     }
   }
 
 
 
   else if (window.location.hostname.includes("realtor")) {
-    for (let card of document.querySelectorAll("[data-testid='property-detail']")) {
-      mavenloanCreateBtn("realtor", card, "[data-label='pc-price']", "[data-label='pc-address']", ".property-meta", "[r='xxs']");
+    for (let card of document.querySelectorAll(cardSel.realtor)) {
+      mavenloanCreateBtn("realtor", card, priceSel.realtor, 'realtor-main');
     }
     let mainMutationCallback = function (mutations) {
       for (let mutation of mutations) {
@@ -235,8 +222,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         for (let node of mutation.addedNodes) {
           if (node.nodeType === 1) {
-            for (let card of node.querySelectorAll("[data-testid='home-card-sale']")) {
-              mavenloanCreateBtn("realtor", card, "[data-testid='property-price']", "address.list-card-addr", "[r='xxs']");
+            for (let card of node.querySelectorAll(cardSel.realtor)) {
+              mavenloanCreateBtn("realtor", card, priceSel.realtor, 'realtor-main');
             }
           }
         }
@@ -244,17 +231,10 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     let mainObserver = new MutationObserver(mainMutationCallback);
     mainObserver.observe(document, {attributes: false, childList: true, subtree: true});
-
-    let standalonePage = document.querySelector("[data-testid='home-details-summary-container']");
+    // Big:
+    let standalonePage = document.querySelector(cardSel.realtorBig);
     if (standalonePage !== null) {
-      mavenloanCreateBtn(
-        "realtor",
-        standalonePage,
-        "[data-testid='on-market-price-details']",
-        "[data-testid='home-details-summary-headline'], [data-testid='home-details-summary-city-state']",
-        "[data-testid='facts-list'] > li",
-        "realtor-big"
-      );
+      mavenloanCreateBtn("realtor", standalonePage, priceSel.realtorBig, 'realtor-big');
     }
   }
 });

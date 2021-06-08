@@ -9,11 +9,14 @@
   outline: none !important;
   border-radius: 3px;
   padding: 6px 0;
+  text-decoration: none !important;
 }
+
 .mavenloan-btn:hover,
 .mavenloan-btn:focus {
   background: rgb(36, 43, 117);
 }
+
 .mavenloan-btn:active {
   background: rgb(39, 49, 160);
 }
@@ -21,33 +24,54 @@
 .mavenloan-btn.mavenloan-zillow-main {
   margin: 10px;
 }
+
 .mavenloan-btn.mavenloan-zillow-big {
   margin: 20px 0 0;
   padding: 10px 0;
 }
+
 .mavenloan-btn.mavenloan-realtor-main {
   margin: 10px;
 }
+
 .mavenloan-btn.mavenloan-realtor-big {
   margin: 10px 0 0;
   padding: 10px 0;
 }
+
 .mavenloan-btn.mavenloan-trulia {
   margin: 0;
 }
+
 .mavenloan-btn.mavenloan-trulia-big {
   padding: 8px 0;
   font-size: 1.1em;
 }
+
 .mavenloan-btn.mavenloan-redfin-main {
-  border: 1px solid #21265E !important;
-  position: absolute;
-  font-weight: bold;
-  left: 10px;
-  top: -4em;
-  padding: 6px 10px;
+  margin: 0 15px 10px 15px;
 }
+
 .mavenloan-btn.mavenloan-redfin-big {
   font-size: 1.1em;
-  width: 300px;
+  margin-top: 25px !important;
+}
+
+/* redfin.com */
+.HomeViews>.PhotosView .HomeCardContainer>*,
+.HomeViews>.PhotosView .HomeCardContainer .v2 {
+  height: auto;
+  min-height: 360px !important;
+}
+
+/* redfin.ca */
+.similarHomecardHeight.PhotosView .HomeCardContainer>*,
+.similarHomecardHeight.PhotosView .HomeCardContainer>.HomeCard>.v2 {
+  height: auto !important;
+  min-height: 360px !important;
+}
+
+/* realtor */
+ul[data-testid="property-list-container"] li[data-testid="result-card"] div[data-testid="property-card"] {
+  padding-bottom: 1px !important;
 }
