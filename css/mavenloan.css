@@ -8,7 +8,7 @@
   border: none !important;
   outline: none !important;
   border-radius: 3px;
-  padding: 6px 0;  
+  padding: 6px 0;
 }
 .mavenloan-btn:hover,
 .mavenloan-btn:focus {
@@ -22,7 +22,7 @@
   margin: 10px;
 }
 .mavenloan-btn.mavenloan-zillow-big {
-  margin: 10px 0 0;
+  margin: 20px 0 0;
   padding: 10px 0;
 }
 .mavenloan-btn.mavenloan-realtor-main {
