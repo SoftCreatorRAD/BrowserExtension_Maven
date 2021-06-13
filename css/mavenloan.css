@@ -7,9 +7,11 @@
   background: #21265E;
   border: none !important;
   outline: none !important;
-  border-radius: 3px;
-  padding: 6px 0;
+  border-radius: 4px;
+  padding: 5px 0;
   text-decoration: none !important;
+  font-size: 14px;
+  font-family: Tahoma, sans-serif;
 }
 
 .mavenloan-btn:hover,
@@ -21,6 +23,8 @@
   background: rgb(39, 49, 160);
 }
 
+
+
 .mavenloan-btn.mavenloan-zillow-main {
   margin: 10px;
 }
@@ -30,14 +34,18 @@
   padding: 10px 0;
 }
 
+
+
 .mavenloan-btn.mavenloan-realtor-main {
   margin: 10px;
 }
 
 .mavenloan-btn.mavenloan-realtor-big {
   margin: 10px 0 0;
-  padding: 10px 0;
+  padding: 10px 0 !important;
 }
+
+
 
 .mavenloan-btn.mavenloan-trulia {
   margin: 0;
@@ -48,11 +56,14 @@
   font-size: 1.1em;
 }
 
+
+
 .mavenloan-btn.mavenloan-redfin-main {
   margin: 0 15px 10px 15px;
 }
 
 .mavenloan-btn.mavenloan-redfin-big {
+  padding: 10px;
   font-size: 1.1em;
   margin-top: 25px !important;
 }
@@ -74,4 +85,8 @@
 /* realtor */
 ul[data-testid="property-list-container"] li[data-testid="result-card"] div[data-testid="property-card"] {
   padding-bottom: 1px !important;
+}
+
+div[data-testid="property-card"] .pc-bottom-left.jsx-2191194021 {
+  bottom: 185px !important;
 }
