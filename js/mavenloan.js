@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         redfin: '.homeAddressV2',
         redfinBig: 'h1.address',
         realtor: '[data-label="pc-address"]',
-        realtorBig: '[data-testid="address-section"]',
+        realtorBig: '.address-value', //'[data-testid="address-section"]',
       }
       const detailsSel = {
         trulia: '[r="xxs"]',
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
         redfin: '.HomeStatsV2 > div',
         redfinBig: '.home-main-stats-variant > div',
         realtor: '.property-meta > li',
-        realtorBig: '.property-meta > li',
+        realtorBig: '[data-testid="property-meta"] li', //'.property-meta > li',
       }
       let url = 'http://app.maven.loan/api/Custom/Process?actionName=losMaven&wrapResult=false&source=' + domain;
       big = evt.target.classList.contains('mavenloan-' + domain + '-big') ? 'Big' : '';
@@ -221,6 +221,9 @@ document.addEventListener('DOMContentLoaded', function () {
           if (node.nodeType === 1) {
             for (let card of node.querySelectorAll(cardSel.realtor)) {
               mavenloanCreateBtn('realtor', card, priceSel.realtor, 'realtor-main');
+            }
+            if (node.querySelector(priceSel.realtorBig)) {
+              mavenloanCreateBtn('realtor', node.querySelector(cardSel.realtorBig), priceSel.realtorBig, 'realtor-big');
             }
           }
         }
