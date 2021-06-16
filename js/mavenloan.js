@@ -5,11 +5,11 @@ const cardSel = {
   trulia: '[data-testid="home-card-sale"]',
   truliaBig: '[data-testid="home-details-summary-container"]',
   zillow: 'article.list-card',
-  zillowBig: '#search-detail-lightbox .ds-home-details-chip',
+  zillowBig: '#home-detail-lightbox-container',
   redfin: '.HomeCard .v2',
-  redfinBig: '.HomeInfoV2',
+  redfinBig: '.aboveBelowTheRail',
   realtor: '[data-testid="property-list-container"] [data-testid="property-card"]',
-  realtorBig: '[data-testid="listing-summary-info"]', // '[data-testid="listing-details-id"]',
+  realtorBig: '[data-testid="listing-details-id"]',
 }
 const priceSel = {
   trulia: '[data-testid="property-price"]',
@@ -45,6 +45,16 @@ document.addEventListener('DOMContentLoaded', function () {
         redfinBig: '.home-main-stats-variant > div',
         realtor: '.property-meta > li',
         realtorBig: '[data-testid="property-meta"] li', //'.property-meta > li',
+      }
+      const pictureSel = {
+        trulia: '[data-testid="property-image-0"] img',
+        truliaBig: 'img[class*="HomeDetailsHero__HeroImg-sc-"]', // '[data-testid="hdp-hero-img-tile"] img',
+        zillow: '.list-card-img img',
+        zillowBig: '.media-stream-tile--prominent img',
+        redfin: '[data-rf-test-name="basic-card-photo"] .HomeCardImage',
+        redfinBig: '#MBImage0 img',
+        realtor: 'img.top',
+        realtorBig: '.slick-track [data-index="0"] img',
       }
       let url = 'http://app.maven.loan/api/Custom/Process?actionName=losMaven&wrapResult=false&source=' + domain;
       big = evt.target.classList.contains('mavenloan-' + domain + '-big') ? 'Big' : '';
@@ -96,8 +106,19 @@ document.addEventListener('DOMContentLoaded', function () {
           }
         }
       }
-      //chrome.runtime.sendMessage(url);
+
+      let picturePath = '';
+      if (domain === 'redfin' && !big) {
+        picturePath = card.querySelector(pictureSel[domain + big]).style.backgroundImage.replace(/"/g, '').replace('url(', '').replace(')', '');
+      } if (domain === 'trulia' && big) {
+        picturePath = document.querySelector(pictureSel[domain + big]).src;
+      } else {
+        picturePath = card.querySelector(pictureSel[domain + big]).src;
+      }
+
       console.log(url);
+      console.log(picturePath);
+      //chrome.runtime.sendMessage(url);
     }
   });
 
@@ -130,10 +151,10 @@ document.addEventListener('DOMContentLoaded', function () {
     mainObserver.observe(propertiesParent, {attributes: false, childList: true, subtree: true});
 
     // Big card:
-    let detailsPopup = document.getElementById('home-detail-lightbox-container');
+    let detailsPopup = document.querySelector(cardSel.zillowBig);
     let detailsMutationCallback = function (mutations) {
       if (mutations[0].addedNodes.length > 0) {
-        mavenloanCreateBtn('zillow', detailsPopup.querySelector(cardSel.zillowBig), priceSel.zillowBig, 'zillow-big');
+        mavenloanCreateBtn('zillow', detailsPopup, priceSel.zillowBig, 'zillow-big');
       }
     };
     let detailsObserver = new MutationObserver(detailsMutationCallback);
@@ -188,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         for (let node of mutation.addedNodes) {
           if (node.nodeType === 1) {
-            for (let card of node.querySelectorAll(cardSel.redfin)) { //'.HomeCard .bottomV2, .SimilarHomeCardReact .bottomV2'
+            for (let card of node.querySelectorAll(cardSel.redfin)) {
               mavenloanCreateBtn('redfin', card, priceSel.redfin, 'redfin-main');
             }
           }
@@ -242,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 var mavenloanParseNum = function (el) {
   let str = el.textContent.trim().replace(/[^.\d]/g, ''); // Keep only digits and period
-  while(str.charAt(0) === '.') {
+  while (str.charAt(0) === '.') {
     str = str.slice(1);
   }
   if (el.textContent.trim().endsWith('K')) {
@@ -270,12 +291,19 @@ var mavenloanCreateBtn = function (website, currentCard, currentPriceSel, extra)
   }
 
   let btn = document.createElement('a');
-  // Emoji location: //unicode-table.com/en/emoji/
-  btn.innerHTML = 'Add to Maven \u{27A0}\u{1F4D1}';
+  btn.innerHTML = 'Add to Maven \u{27A0}\u{1F4D1}'; //unicode-table.com/en/emoji
   btn.classList.add('mavenloan-btn');
-  btn.classList.add(`mavenloan-${website}`);
-  if (extra) {
-    btn.classList.add(`mavenloan-${extra}`);
+  btn.classList.add('mavenloan-' + website);
+  btn.classList.add('mavenloan-' + extra);
+
+  const bigBtnContainerSel = { // контейнер для большой кнопки, т.к .parentElement большой кнопки != currentCard
+    truliaBig: '[data-testid="home-details-summary-container"]',
+    zillowBig: '#search-detail-lightbox .ds-chip .ds-home-details-chip',
+    redfinBig: '.HomeInfoV2',
+    realtorBig: '[data-testid="listing-summary-info"]',
+  }
+  if (extra.endsWith('-big') && website !== 'trulia') {
+    currentCard = currentCard.querySelector(bigBtnContainerSel[website + 'Big']);
   }
 
   currentCard.appendChild(btn);
