@@ -56,13 +56,17 @@ document.addEventListener('DOMContentLoaded', function () {
         realtor: 'img.top',
         realtorBig: '.slick-track [data-index="0"] img',
       }
-      let url = 'http://app.maven.loan/api/Custom/Process?actionName=losMaven&wrapResult=false&source=' + domain;
-      let big = evt.target.classList.contains('mavenloan-' + domain + '-big') ? 'Big' : '';
 
+      let big = evt.target.classList.contains('mavenloan-' + domain + '-big') ? 'Big' : '';
       let card = evt.target.closest(cardSel[domain + big]);
 
-      let price = mavenloanParseNum(card.querySelector(priceSel[domain + big]));
-      url += `&price=${price}`;
+      let dataObj = {
+        source: domain,
+        wrapResult: false,
+        actionName: 'losMaven',
+      };
+
+      dataObj.price = mavenloanParseNum(card.querySelector(priceSel[domain + big]));
 
       let addresses = card.querySelectorAll(addressSel[domain + big]);
       let addressString = '';
@@ -71,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       addressString = addressString.replace(/#/g, '').trim();
       if (addressString !== '') {
-        url += `&address=${addressString}`;
+        dataObj.address = addressString;
       }
 
       let details = card.querySelectorAll(detailsSel[domain + big]);
@@ -79,20 +83,20 @@ document.addEventListener('DOMContentLoaded', function () {
         let nodeText = detail.textContent.trim();
         if (nodeText.endsWith('bds') || nodeText.endsWith('bd') || nodeText.endsWith('Beds') || nodeText.endsWith('Bed') || nodeText.endsWith('bed')) {
           let beds = mavenloanParseNum(detail);
-          if (beds > 0 && url.indexOf('&beds=') === -1) {
-            url += `&beds=${beds}`;
+          if (beds > 0 && !dataObj.beds) {
+            dataObj.beds = beds;
           }
         }
         if (nodeText.endsWith('ba') || nodeText.endsWith('Baths') || nodeText.endsWith('Bath') || nodeText.endsWith('bath')) {
           let baths = mavenloanParseNum(detail);
-          if (baths > 0 && url.indexOf('&baths=') === -1) {
-            url += `&baths=${baths}`;
+          if (baths > 0 && !dataObj.baths) {
+            dataObj.baths = baths;
           }
         }
         if (nodeText.endsWith('sqft') || nodeText.endsWith('Sq. Ft.') || nodeText.endsWith('Sq Ft')) {
           let sqft = mavenloanParseNum(detail);
-          if (sqft > 0 && url.indexOf('&sqft=') === -1) {
-            url += `&sqft=${sqft}`;
+          if (sqft > 0 && !dataObj.sqft) {
+            dataObj.sqft = sqft;
           }
         }
       }
@@ -105,10 +109,11 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         picturePath = card.querySelector(pictureSel[domain + big]).src;
       }
+      dataObj.picturePath = picturePath;
 
-      console.log(url);
-      console.log(picturePath);
-      //chrome.runtime.sendMessage(url);
+
+      chrome.runtime.sendMessage(JSON.stringify(dataObj));
+      console.log('SENDED: ' + JSON.stringify(dataObj, null, '  '));
     }
   });
 
