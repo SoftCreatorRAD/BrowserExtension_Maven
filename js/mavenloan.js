@@ -1,5 +1,4 @@
-const domain = location.hostname.split('.').reverse()[1];
-let big = '';
+const domain = window.location.hostname.split('.').reverse()[1];
 
 const cardSel = {
   trulia: '[data-testid="home-card-sale"]',
@@ -11,6 +10,7 @@ const cardSel = {
   realtor: '[data-testid="property-list-container"] [data-testid="property-card"]',
   realtorBig: '[data-testid="listing-details-id"]',
 }
+
 const priceSel = {
   trulia: '[data-testid="property-price"]',
   truliaBig: '[data-testid="home-details-sm-lg-xl-price-details"]>h3',
@@ -57,21 +57,11 @@ document.addEventListener('DOMContentLoaded', function () {
         realtorBig: '.slick-track [data-index="0"] img',
       }
       let url = 'http://app.maven.loan/api/Custom/Process?actionName=losMaven&wrapResult=false&source=' + domain;
-      big = evt.target.classList.contains('mavenloan-' + domain + '-big') ? 'Big' : '';
+      let big = evt.target.classList.contains('mavenloan-' + domain + '-big') ? 'Big' : '';
 
       let card = evt.target.closest(cardSel[domain + big]);
 
-      if (!card) {
-        return;
-      }
-      let price = card.querySelector(priceSel[domain + big]);
-      if (price === null) {
-        return;
-      }
-      price = mavenloanParseNum(price);
-      if (price < 10000) {
-        return;
-      }
+      let price = mavenloanParseNum(card.querySelector(priceSel[domain + big]));
       url += `&price=${price}`;
 
       let addresses = card.querySelectorAll(addressSel[domain + big]);
@@ -110,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
       let picturePath = '';
       if (domain === 'redfin' && !big) {
         picturePath = card.querySelector(pictureSel[domain + big]).style.backgroundImage.replace(/"/g, '').replace('url(', '').replace(')', '');
-      } if (domain === 'trulia' && big) {
+      } else if (domain === 'trulia' && big) {
         picturePath = document.querySelector(pictureSel[domain + big]).src;
       } else {
         picturePath = card.querySelector(pictureSel[domain + big]).src;
@@ -124,12 +114,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  if (window.location.hostname.includes('zillow')) {
+  if (domain === 'zillow') {
     let propertiesParent = document.getElementById('grid-search-results');
     if (propertiesParent === null) {
       return;
     }
-
     for (let card of propertiesParent.querySelectorAll(cardSel.zillow)) {
       mavenloanCreateBtn('zillow', card, priceSel.zillow, 'zillow-main');
     }
@@ -149,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     let mainObserver = new MutationObserver(mainMutationCallback);
     mainObserver.observe(propertiesParent, {attributes: false, childList: true, subtree: true});
-
     // Big card:
     let detailsPopup = document.querySelector(cardSel.zillowBig);
     let detailsMutationCallback = function (mutations) {
@@ -163,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  else if (window.location.hostname.includes('trulia')) {
+  else if (domain === 'trulia') {
     for (let card of document.querySelectorAll(cardSel.trulia)) {
       mavenloanCreateBtn('trulia', card, priceSel.trulia, 'trulia-main');
     }
@@ -174,7 +162,6 @@ document.addEventListener('DOMContentLoaded', function () {
             mutation.target.appendChild(node);
           }
         }
-
         for (let node of mutation.addedNodes) {
           if (node.nodeType === 1) {
             for (let card of node.querySelectorAll(cardSel.trulia)) {
@@ -186,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     let mainObserver = new MutationObserver(mainMutationCallback);
     mainObserver.observe(document, {attributes: false, childList: true, subtree: true});
-
     // Big card:
     let standalonePage = document.querySelector(cardSel.truliaBig);
     if (standalonePage !== null) {
@@ -196,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  else if (window.location.hostname.includes('redfin')) {
+  else if (domain === 'redfin') {
     for (let card of document.querySelectorAll(cardSel.redfin)) {
       mavenloanCreateBtn('redfin', card, priceSel.redfin, 'redfin-main');
     }
@@ -218,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     let mainObserver = new MutationObserver(mainMutationCallback);
     mainObserver.observe(document, {attributes: false, childList: true, subtree: true});
-
+    // Big card:
     let standalonePage = document.querySelector(cardSel.redfinBig);
     if (standalonePage !== null) {
       mavenloanCreateBtn('redfin', standalonePage, priceSel.redfinBig, 'redfin-big');
@@ -227,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-  else if (window.location.hostname.includes('realtor')) {
+  else if (domain === 'realtor') {
     for (let card of document.querySelectorAll(cardSel.realtor)) {
       mavenloanCreateBtn('realtor', card, priceSel.realtor, 'realtor-main');
     }
@@ -252,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     let mainObserver = new MutationObserver(mainMutationCallback);
     mainObserver.observe(document, {attributes: false, childList: true, subtree: true});
-    // Big:
+    // Big card:
     let standalonePage = document.querySelector(cardSel.realtorBig);
     if (standalonePage !== null) {
       mavenloanCreateBtn('realtor', standalonePage, priceSel.realtorBig, 'realtor-big');
@@ -296,7 +282,7 @@ var mavenloanCreateBtn = function (website, currentCard, currentPriceSel, extra)
   btn.classList.add('mavenloan-' + website);
   btn.classList.add('mavenloan-' + extra);
 
-  const bigBtnContainerSel = { // контейнер для большой кнопки, т.к .parentElement большой кнопки != currentCard
+  const bigBtnContainerSel = {  // big button container != currentCard  (exclude trulia)
     truliaBig: '[data-testid="home-details-summary-container"]',
     zillowBig: '#search-detail-lightbox .ds-chip .ds-home-details-chip',
     redfinBig: '.HomeInfoV2',
