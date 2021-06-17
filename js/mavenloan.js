@@ -23,6 +23,40 @@ const priceSel = {
 }
 
 
+window.addEventListener('load', function () {
+  if (domain === 'trulia') {
+    setTimeout(() => {
+      let preloadContainer = document.querySelector('[data-testid="affordability-placeholder"]');
+      if (preloadContainer) {
+        let offset = {
+          x: window.pageXOffset,
+          y: window.pageYOffset
+        }
+        preloadContainer.scrollIntoView(true);
+        setTimeout(function () {
+          window.scrollTo(offset.x, offset.y);
+        }, 20);
+      }
+    }, 0);
+  } else if (domain === 'realtor') {
+    setTimeout(() => {
+      let btn = document.querySelector('[data-label="Monthly Payment"]>[data-testid="section-toggle"]');
+      if (btn) {
+        btn.click();
+        let offset = {
+          x: window.pageXOffset,
+          y: window.pageYOffset
+        }
+        btn.scrollIntoView(true);
+        setTimeout(() => {
+          window.scrollTo(offset.x, offset.y);
+        }, 40);
+      }
+    }, 500);
+  }
+});
+
+
 document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('click', function (evt) {
     if (evt.target && evt.target.classList.contains('mavenloan-btn')) {
@@ -55,6 +89,18 @@ document.addEventListener('DOMContentLoaded', function () {
         redfinBig: '#MBImage0 img',
         realtor: 'img.top',
         realtorBig: '.slick-track [data-index="0"] img',
+      }
+      const taxPaymentSel = {
+        truliaBig: '[data-testid="affordability-table"] .Grid__CellBox-sc-144isrp-0:nth-child(2)',
+        zillowBig: '#label-property-tax',
+        redfinBig: '.CalculatorSummary > .colorBarLegend > div:nth-child(2)',
+        realtorBig: '#content-payment_calculator .list-unstyled>li:nth-child(2)',
+      }
+      const homeInsuranceSel = {
+        truliaBig: '[data-testid="affordability-table"] .Grid__CellBox-sc-144isrp-0:nth-child(3)',
+        zillowBig: '#label-home-insurance',
+        redfinBig: '.CalculatorSummary > .colorBarLegend > div:nth-child(4)',
+        realtorBig: '#content-payment_calculator .list-unstyled>li:nth-child(3)',
       }
 
       let big = evt.target.classList.contains('mavenloan-' + domain + '-big') ? 'Big' : '';
@@ -111,9 +157,27 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       dataObj.picturePath = picturePath;
 
+      if (big) {
+        let propertyTaxesNode = document.querySelector(taxPaymentSel[domain + big]);
+        if (propertyTaxesNode) {
+          let propertyTaxesValue = mavenloanParseNum(propertyTaxesNode);
+          if (propertyTaxesValue) {
+            dataObj.propertyTaxes = propertyTaxesValue;
+          }
+        }
+
+        let homeInsuranceNode = document.querySelector(homeInsuranceSel[domain + big]);
+        if (homeInsuranceNode) {
+          let homeInsuranceValue = mavenloanParseNum(homeInsuranceNode);
+          if (homeInsuranceValue) {
+            dataObj.homeInsurance = homeInsuranceValue;
+          }
+        }
+      }
 
       chrome.runtime.sendMessage(JSON.stringify(dataObj));
       console.log('SENDED: ' + JSON.stringify(dataObj, null, '  '));
+      alert('SENDED: ' + JSON.stringify(dataObj, null, '  '));
     }
   });
 

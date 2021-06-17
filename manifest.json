@@ -1,5 +1,5 @@
 {
-  "version": "0.3.2",
+  "version": "0.4.0",
   "name": "Maven Analyzer for Zillow/Trulia/Realtor/Redfin",
   "description": "Maven Analyzer transfer peroperty listings from Zillow/Trulia/Realtor/Redfin to Maven for further analysis and pre-approval.",
   "homepage_url": "https://maven.loan",
