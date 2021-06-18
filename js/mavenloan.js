@@ -90,18 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
         realtor: 'img.top',
         realtorBig: '.slick-track [data-index="0"] img',
       }
-      const taxPaymentSel = {
-        truliaBig: '[data-testid="affordability-table"] .Grid__CellBox-sc-144isrp-0:nth-child(2)',
-        zillowBig: '#label-property-tax',
-        redfinBig: '.CalculatorSummary > .colorBarLegend > div:nth-child(2)',
-        realtorBig: '#content-payment_calculator .list-unstyled>li:nth-child(2)',
-      }
-      const homeInsuranceSel = {
-        truliaBig: '[data-testid="affordability-table"] .Grid__CellBox-sc-144isrp-0:nth-child(3)',
-        zillowBig: '#label-home-insurance',
-        redfinBig: '.CalculatorSummary > .colorBarLegend > div:nth-child(4)',
-        realtorBig: '#content-payment_calculator .list-unstyled>li:nth-child(3)',
-      }
 
       let big = evt.target.classList.contains('mavenloan-' + domain + '-big') ? 'Big' : '';
       let card = evt.target.closest(cardSel[domain + big]);
@@ -158,19 +146,53 @@ document.addEventListener('DOMContentLoaded', function () {
       dataObj.picturePath = picturePath;
 
       if (big) {
-        let propertyTaxesNode = document.querySelector(taxPaymentSel[domain + big]);
-        if (propertyTaxesNode) {
-          let propertyTaxesValue = mavenloanParseNum(propertyTaxesNode);
-          if (propertyTaxesValue) {
-            dataObj.propertyTaxes = propertyTaxesValue;
+        if (domain === 'zillow') {
+          let propertyTaxesNode = document.querySelector('#label-property-tax');
+          if (propertyTaxesNode) {
+            let propertyTaxesValue = mavenloanParseNum(propertyTaxesNode);
+            if (propertyTaxesValue > 0) {
+              dataObj.propertyTaxes = propertyTaxesValue;
+            }
           }
-        }
-
-        let homeInsuranceNode = document.querySelector(homeInsuranceSel[domain + big]);
-        if (homeInsuranceNode) {
-          let homeInsuranceValue = mavenloanParseNum(homeInsuranceNode);
-          if (homeInsuranceValue) {
-            dataObj.homeInsurance = homeInsuranceValue;
+          let homeInsuranceNode = document.querySelector('#label-home-insurance');
+          if (homeInsuranceNode) {
+            let homeInsuranceValue = mavenloanParseNum(homeInsuranceNode);
+            if (homeInsuranceValue > 0) {
+              dataObj.homeInsurance = homeInsuranceValue;
+            }
+          }
+          let hoaNode = document.querySelector('#label-hoa');
+          if (hoaNode) {
+            let hoaValue = mavenloanParseNum(hoaNode);
+            if (hoaValue > 0) {
+              dataObj.hoa = hoaValue;
+            }
+          }
+        } else {
+          let taxDetailsSel = {
+            truliaBig: '[data-testid="affordability-table"] .Grid__CellBox-sc-144isrp-0',
+            redfinBig: '.CalculatorSummary > .colorBarLegend > div',
+            realtorBig: '#content-payment_calculator .list-unstyled>li',
+          }
+          let taxDetailsNodes = document.querySelectorAll(taxDetailsSel[domain + big]);
+          for (let taxNode of taxDetailsNodes) {
+            let nodeTxt = taxNode.textContent.trim().toLowerCase();
+            if (nodeTxt.includes('property') && nodeTxt.includes('tax')) {
+              let propertyTaxes = mavenloanParseNum(taxNode);
+              if (propertyTaxes > 0 && !dataObj.propertyTaxes) {
+                dataObj.propertyTaxes = propertyTaxes;
+              }
+            } else if (nodeTxt.includes('home') && nodeTxt.includes('insurance') ) {
+              let homeInsurance = mavenloanParseNum(taxNode);
+              if (homeInsurance > 0 && !dataObj.homeInsurance) {
+                dataObj.homeInsurance = homeInsurance;
+              }
+            } else if (nodeTxt.includes('hoa')) {
+              let hoa = mavenloanParseNum(taxNode);
+              if (hoa > 0 && !dataObj.hoa) {
+                dataObj.hoa = hoa;
+              }
+            }
           }
         }
       }
