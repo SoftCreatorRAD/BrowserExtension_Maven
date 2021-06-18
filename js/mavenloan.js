@@ -40,21 +40,29 @@ window.addEventListener('load', function () {
     }, 0);
   } else if (domain === 'realtor') {
     setTimeout(() => {
-      let btn = document.querySelector('[data-label="Monthly Payment"]>[data-testid="section-toggle"]');
-      if (btn) {
-        btn.click();
-        let offset = {
-          x: window.pageXOffset,
-          y: window.pageYOffset
-        }
-        btn.scrollIntoView(true);
-        setTimeout(() => {
-          window.scrollTo(offset.x, offset.y);
-        }, 40);
-      }
+      preloadPaymentDataRealtor();
     }, 500);
   }
 });
+
+
+let preloadPaymentDataRealtor = function () {
+  let btn = document.querySelector('[data-label="Monthly Payment"]>[data-testid="section-toggle"]');
+  if (btn) {
+    let offset = {
+      x: window.pageXOffset,
+      y: window.pageYOffset
+    }
+    btn.scrollIntoView(true);
+    setTimeout(() => {
+      btn.click();
+      setTimeout(() => {
+        window.scrollTo(offset.x, offset.y);
+      }, 50);
+    }, 50);
+  }
+}
+
 
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -100,7 +108,13 @@ document.addEventListener('DOMContentLoaded', function () {
         actionName: 'losMaven',
       };
 
-      dataObj.price = mavenloanParseNum(card.querySelector(priceSel[domain + big]));
+      let priceNode = card.querySelector(priceSel[domain + big]);
+      if (priceNode) {
+        let priceValue = mavenloanParseNum(priceNode);
+        if (priceValue > 0) {
+          dataObj.price = priceValue;
+        }
+      }
 
       let addresses = card.querySelectorAll(addressSel[domain + big]);
       let addressString = '';
@@ -182,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function () {
               if (propertyTaxes > 0 && !dataObj.propertyTaxes) {
                 dataObj.propertyTaxes = propertyTaxes;
               }
-            } else if (nodeTxt.includes('home') && nodeTxt.includes('insurance') ) {
+            } else if (nodeTxt.includes('home') && nodeTxt.includes('insurance')) {
               let homeInsurance = mavenloanParseNum(taxNode);
               if (homeInsurance > 0 && !dataObj.homeInsurance) {
                 dataObj.homeInsurance = homeInsurance;
@@ -322,6 +336,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             if (node.querySelector(priceSel.realtorBig)) {
               mavenloanCreateBtn('realtor', node.querySelector(cardSel.realtorBig), priceSel.realtorBig, 'realtor-big');
+              setTimeout(() => {
+                preloadPaymentDataRealtor();
+              }, 500);
             }
           }
         }
