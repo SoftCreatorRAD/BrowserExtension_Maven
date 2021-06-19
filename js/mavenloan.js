@@ -182,6 +182,14 @@ document.addEventListener('DOMContentLoaded', function () {
               dataObj.hoa = hoaValue;
             }
           }
+
+          let propertyTypeNodes = document.querySelectorAll('.ds-home-fact-list > li');
+          for (let typeNode of propertyTypeNodes) {
+            if (!dataObj.propertyType && typeNode.textContent.indexOf('Type:') !== -1) {
+              dataObj.propertyType = typeNode.textContent.split('Type:')[1];
+            }
+          }
+
         } else {
           let taxDetailsSel = {
             truliaBig: '[data-testid="affordability-table"] .Grid__CellBox-sc-144isrp-0',
@@ -208,12 +216,35 @@ document.addEventListener('DOMContentLoaded', function () {
               }
             }
           }
+
+          if (domain === 'redfin') {
+            let keyDetails = document.querySelectorAll('#house-info .keyDetail');
+            for (const keyDetail of keyDetails) {
+              if (!dataObj.propertyType && keyDetail.textContent.indexOf('Property Type') !== -1) {
+                dataObj.propertyType = keyDetail.textContent.replace('Property Type', '');
+              }
+            }
+          } else if (domain === 'realtor') {
+            let propItems = document.querySelectorAll('[data-testid="listing-indicator"]>li');
+            for (const propItem of propItems) {
+              if (!dataObj.propertyType && propItem.textContent.indexOf('Property Type') !== -1) {
+                dataObj.propertyType = propItem.textContent.replace('Property Type', '');
+              }
+            }
+          } else if (domain === 'trulia') {
+            let propItems = document.querySelectorAll('[data-testid="structured-amenities-table-category"] [class*="Feature__FeatureListItem-sc-"]');
+            for (const propItem of propItems) {
+              if (!dataObj.propertyType && propItem.textContent.indexOf('Property Type:') !== -1) {
+                dataObj.propertyType = propItem.textContent.replace('Property Type:', '').replace(/"/g,'').trim();
+              }
+            }
+          }
         }
       }
 
       chrome.runtime.sendMessage(JSON.stringify(dataObj));
-      console.log('SENDED: ' + JSON.stringify(dataObj, null, '  '));
-      alert('SENDED: ' + JSON.stringify(dataObj, null, '  '));
+      console.table(dataObj);
+      //alert(JSON.stringify(dataObj, null, '  '));
     }
   });
 
