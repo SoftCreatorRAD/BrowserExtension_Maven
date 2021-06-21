@@ -15,7 +15,7 @@ const priceSel = {
   trulia: '[data-testid="property-price"]',
   truliaBig: '[data-testid="home-details-sm-lg-xl-price-details"]>h3',
   zillow: '.list-card-price',
-  zillowBig: '.ds-chip .ds-summary-row > span:first-child',
+  zillowBig: '.ds-home-details-chip .ds-summary-row > span:first-child, .ds-chip div[class*="Flex-"]>div[class*="Flex-"]>span[class*="Text-"]',
   redfin: '.homecardV2Price',
   redfinBig: '.price-section',
   realtor: '[data-label="pc-price"]',
@@ -432,7 +432,7 @@ var mavenloanCreateBtn = function (website, currentCard, currentPriceSel, extra)
 
   const bigBtnContainerSel = {  // big button container != currentCard  (exclude trulia)
     truliaBig: '[data-testid="home-details-summary-container"]',
-    zillowBig: '#search-detail-lightbox .ds-chip .ds-home-details-chip',
+    zillowBig: '.ds-buttons', // '.ds-home-details-chip',
     redfinBig: '.HomeInfoV2',
     realtorBig: '[data-testid="listing-summary-info"]',
   }
