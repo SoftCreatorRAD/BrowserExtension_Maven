@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
         truliaBig: 'img[class*="HomeDetailsHero__HeroImg-sc-"]', // '[data-testid="hdp-hero-img-tile"] img',
         zillow: '.list-card-img img',
         zillowBig: '.media-stream-tile--prominent img',
-        redfin: '[data-rf-test-name="basic-card-photo"] .HomeCardImage',
+        redfin: '[data-rf-test-name="basic-card-photo"] *',  // sometimes it's img and sometimes div
         redfinBig: '#MBImage0 img',
         realtor: 'img.top',
         realtorBig: '.slick-track [data-index="0"] img',
@@ -151,7 +151,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
       let picturePath = '';
       if (domain === 'redfin' && !big) {
-        picturePath = card.querySelector(pictureSel[domain + big]).style.backgroundImage.replace(/"/g, '').replace('url(', '').replace(')', '');
+        let picNodes = card.querySelectorAll(pictureSel[domain + big]);
+        for (const picNode of picNodes) {
+          if (!picturePath) {
+            if (picNode.nodeName === 'IMG' && picNode.src) { // sometimes it's img and sometimes div
+              picturePath = picNode.src;
+            } else {
+              picturePath = picNode.style.backgroundImage.replace(/"/g, '').replace('url(', '').replace(')', '');
+            }
+          }
+        }
       } else if (domain === 'trulia' && big) {
         picturePath = document.querySelector(pictureSel[domain + big]).src;
       } else {
