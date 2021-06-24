@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles.css" />
+  <title>Log in</title>
+  <style>
+    @font-face {
+      font-family: Montserrat;
+      src: url(./../fonts/Montserrat-Medium.ttf);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    html {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Montserrat", "Tahoma", sans-serif;
+    }
+
+    .login {
+      width: 400px;
+    }
+
+    .login-header {
+      height: 100px;
+    }
+
+    .login-body {
+      height: 320px;
+      padding: 8px 42px;
+      background-color: #f6f7fb;
+      border: 1px solid #e8e9ed;
+    }
+
+    .username-input {
+      font-family: "Montserrat", "Tahoma", sans-serif;
+      font-size: 14px;
+      width: 100%;
+      height: 42px;
+      padding-left: 15px;
+      padding-right: 52px;
+      border: 1px solid #e8e9ed;
+      border-radius: 3px;
+      background-image: url(./../img/username-icon.png);
+      background-position: right center;
+      background-repeat: no-repeat;
+    }
+
+    .username-input:focus {
+      outline: none;
+      border: 2px solid #3ac700;
+    }
+
+    .password-input:focus {
+      outline: none;
+      border: 2px solid #3ac700;
+    }
+
+    .password-input {
+      font-family: "Montserrat", "Tahoma", sans-serif;
+      font-size: 14px;
+      color: #888888;
+      width: 100%;
+      height: 42px;
+      padding-left: 15px;
+      padding-right: 52px;
+      border: 1px solid #e8e9ed;
+      border-radius: 3px;
+      background-image: url(./../img/password-icon.png);
+      background-position: right center;
+      background-repeat: no-repeat;
+    }
+
+    .title {
+      font-size: 14px;
+      color: #484848;
+      margin-top: 20px;
+      margin-bottom: 7px;
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-top: 10px;
+    }
+
+    .forgot-password-link {
+      color: #555555;
+      font-size: 13px;
+    }
+
+    .login-footer {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .login-footer>a {
+      padding: 22px;
+      color: #888888;
+    }
+
+    .login-btn {
+      background-color: #3ac700;
+      border: none;
+      border-radius: 3px;
+      width: 100%;
+      height: 46px;
+      color: white;
+      margin-top: 25px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login">
+    <div class="login-header">
+      <img src="./../img/login-header.png" alt="Rapid Approver">
+    </div>
+    <div class="login-body">
+      <div class="title">Username</div>
+      <input class="username-input" type="text" placeholder="Type your username">
+      <div class="title">Password</div>
+      <input class="password-input" type="password" placeholder="Type your password">
+      <div class="forgot-password">
+        <a class="forgot-password-link" href="#">Forgot password?</a>
+      </div>
+      <input type="button" value="Log in" class="login-btn">
+    </div>
+    <div class="login-footer">
+      <a href="#">HOW TO USE?</a>
+      <a href="#">GO TO WEBSITE</a>
+    </div>
+  </div>
+
+
+
+  <script src="./popup.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main</title>
+  <style>
+    @font-face {
+      font-family: Montserrat;
+      src: url(./../fonts/Montserrat-Medium.ttf);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: inherit;
+    }
+
+    html {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Montserrat", "Tahoma", sans-serif;
+    }
+
+    a {
+      font-family: "Montserrat", "Tahoma", sans-serif;
+      color: #444444;
+    }
+
+    .main-header {
+      font-size: 13px;
+      height: 90px;
+      width: 430px;
+      background-color: #f6f7fb;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e6e7eb;
+    }
+
+    .main-link {
+      font-size: 14px;
+      margin-left: auto;
+      margin-right: 8px;
+      margin-top: 8px;
+    }
+
+    .main-icon {
+      margin-right: 30px;
+      margin-top: 12px;
+    }
+
+    .slogan {
+      text-align: center;
+      font-size: 15px;
+      margin-top: 30px;
+      margin-bottom: 32px;
+      color: #777777;
+    }
+
+    .realtors {
+      display: flex;
+    }
+
+    .summary {
+      background-color: #f6f7fb;
+      border-top: 1px solid #e6e7eb;
+      border-bottom: 1px solid #e6e7eb;
+    }
+
+    .summary-content {
+      border-radius: 6px;
+      box-shadow: 2px 4px 5px #eeeeee;
+      background-color: white;
+      margin: 36px;
+      padding: 20px;
+    }
+
+    .summary-value {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .summary-comment {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 14px;
+      color: #777777;
+    }
+
+    .main-footer {
+      text-align: center;
+    }
+
+    .main-footer-link {
+      display: block;
+      font-size: 14px;
+      padding: 22px;
+      color: #3ac700;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="main-header">
+    <div class="main-logo">
+      <img src="./../img/main-logo.png" alt="Logo">
+    </div>
+    <div class="main-link">
+      <a href="#">Borrower's name</a>
+    </div>
+    <div class="main-icon">
+      <img src="./../img/borrower-icon.png" alt="">
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="slogan">Listing sources for the search estate properties</div>
+    <div class="realtors">
+      <img src="./../img/temp.png" alt="placeholder" style="margin: auto; margin-bottom:40px;">
+    </div>
+    <div class="summary">
+      <div class="summary-content">
+        <div class="summary-value">18</div>
+        <div class="summary-comment">Summary of selected properties</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-footer">
+    <a class="main-footer-link" href="#">GO TO RAPID APPROVER</a>
+  </div>
+</body>
+
+</html>
