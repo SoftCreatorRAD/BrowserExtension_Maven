@@ -4,8 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./styles.css" />
-  <title>Log in</title>
+  <title>Popup</title>
+  <link rel="stylesheet" href="./../popup/login.css">
+  <link rel="stylesheet" href="./../popup/main.css">
   <style>
     @font-face {
       font-family: Montserrat;
@@ -27,124 +28,83 @@
       font-family: "Montserrat", "Tahoma", sans-serif;
     }
 
-    .login {
-      width: 400px;
-    }
-
-    .login-header {
-      height: 100px;
-    }
-
-    .login-body {
-      height: 320px;
-      padding: 8px 42px;
-      background-color: #f6f7fb;
-      border: 1px solid #e8e9ed;
-    }
-
-    .username-input {
+    input {
       font-family: "Montserrat", "Tahoma", sans-serif;
-      font-size: 14px;
-      width: 100%;
-      height: 42px;
-      padding-left: 15px;
-      padding-right: 52px;
-      border: 1px solid #e8e9ed;
-      border-radius: 3px;
-      background-image: url(./../img/username-icon.png);
-      background-position: right center;
-      background-repeat: no-repeat;
     }
 
-    .username-input:focus {
-      outline: none;
-      border: 2px solid #3ac700;
-    }
-
-    .password-input:focus {
-      outline: none;
-      border: 2px solid #3ac700;
-    }
-
-    .password-input {
-      font-family: "Montserrat", "Tahoma", sans-serif;
-      font-size: 14px;
-      color: #888888;
-      width: 100%;
-      height: 42px;
-      padding-left: 15px;
-      padding-right: 52px;
-      border: 1px solid #e8e9ed;
-      border-radius: 3px;
-      background-image: url(./../img/password-icon.png);
-      background-position: right center;
-      background-repeat: no-repeat;
-    }
-
-    .title {
-      font-size: 14px;
-      color: #484848;
-      margin-top: 20px;
-      margin-bottom: 7px;
-    }
-
-    .forgot-password {
-      text-align: right;
-      margin-top: 10px;
-    }
-
-    .forgot-password-link {
-      color: #555555;
-      font-size: 13px;
-    }
-
-    .login-footer {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-
-    .login-footer>a {
-      padding: 22px;
-      color: #888888;
-    }
-
-    .login-btn {
-      background-color: #3ac700;
-      border: none;
-      border-radius: 3px;
-      width: 100%;
-      height: 46px;
-      color: white;
-      margin-top: 25px;
-      font-size: 20px;
+    .link {
+      text-decoration: underline;
+      cursor: pointer;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="login">
-    <div class="login-header">
-      <img src="./../img/login-header.png" alt="Rapid Approver">
-    </div>
-    <div class="login-body">
-      <div class="title">Username</div>
-      <input class="username-input" type="text" placeholder="Type your username">
-      <div class="title">Password</div>
-      <input class="password-input" type="password" placeholder="Type your password">
-      <div class="forgot-password">
-        <a class="forgot-password-link" href="#">Forgot password?</a>
-      </div>
-      <input type="button" value="Log in" class="login-btn">
-    </div>
-    <div class="login-footer">
-      <a href="#">HOW TO USE?</a>
-      <a href="#">GO TO WEBSITE</a>
-    </div>
-  </div>
+  <div class="popup-content"></div>
 
+
+  <template id="login-template">
+    <div class="login">
+      <div class="login-header">
+        <img src="./../img/login-header.png" alt="Rapid Approver">
+      </div>
+
+      <div class="login-body">
+        <div class="title">Username</div>
+        <input class="username-input" type="text" placeholder="Type your username">
+        <div class="title">Password</div>
+        <input class="password-input" type="password" placeholder="Type your password">
+        <div class="forgot-password">
+          <div class="link forgot-password-link">Forgot password?</div>
+        </div>
+        <input class="login-btn" type="button" value="Log in">
+      </div>
+
+      <div class="login-footer">
+        <div class="link" data-link="http://example.com">HOW TO USE?</div>
+        <div class="link" data-link="http://example.com">GO TO WEBSITE</div>
+      </div>
+    </div>
+  </template>
+
+
+  <template id="main-template">
+    <div class="main">
+      <div class="main-header">
+        <div class="main-logo">
+          <img src="./../img/main-logo.png" alt="Logo">
+        </div>
+        <div class="borrower-link">
+          <div class="link">Borrower's name</div>
+        </div>
+        <div class="main-icon">
+          <img src="./../img/borrower-icon.png" alt="">
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="slogan">Listing sources for the search estate properties</div>
+        <div class="realtors">
+          <div class="link realtors-link trulia" data-link="https://www.trulia.com/">Trulia</div>
+          <div class="link realtors-link realtor" data-link="https://www.realtor.com/">Realtor</div>
+          <div class="link realtors-link redfin" data-link="https://www.redfin.com/">Redfin</div>
+          <div class="link realtors-link zillow" data-link="https://www.zillow.com/">Zillow</div>
+        </div>
+        <div class="summary">
+          <div class="summary-content">
+            <div class="summary-value">18</div>
+            <div class="summary-comment">Summary of selected properties</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-footer">
+        <div class="link main-footer-link" data-link="http://example.com/">GO TO RAPID APPROVER</div>
+        <img class="main-footer-arrows" src="./../img/footer-arrows.png" width="20" height="20">
+      </div>
+    </div>
+  </template>
 
 
   <script src="./popup.js"></script>

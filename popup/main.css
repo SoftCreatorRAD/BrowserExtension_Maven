@@ -1,0 +1,121 @@
+a {
+  font-family: "Montserrat", "Tahoma", sans-serif;
+  color: #444444;
+}
+
+.main {
+  width: 430px;
+}
+
+.main-header {
+  font-size: 13px;
+  height: 90px;
+  background-color: #f6f7fb;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e6e7eb;
+}
+
+.borrower-link {
+  font-size: 14px;
+  margin-left: auto;
+  margin-right: 8px;
+  margin-top: 8px;
+}
+
+.main-icon {
+  margin-right: 30px;
+  margin-top: 12px;
+}
+
+.slogan {
+  text-align: center;
+  font-size: 15px;
+  margin-top: 30px;
+  margin-bottom: 17px;
+  color: #777777;
+}
+
+.realtors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+.realtors-link {
+  display: block;
+  width: 148px;
+  height: 56px;
+  border: 1px solid #e8e7ec;
+  margin: 11px 15px;
+  font-size: 0;
+}
+
+.realtors-link:hover {
+  border: 1px solid #3cc600;
+}
+
+.trulia {
+  background-image: url(./../img/logo-trulia.png);
+}
+
+.realtor {
+  background-image: url(./../img/logo-realtor.png);
+}
+
+.redfin {
+  background-image: url(./../img/logo-redfin.png);
+}
+
+.zillow {
+  background-image: url(./../img/logo-zillow.png);
+}
+
+.summary {
+  background-color: #f6f7fb;
+  border-top: 1px solid #e6e7eb;
+  border-bottom: 1px solid #e6e7eb;
+}
+
+.summary-content {
+  border-radius: 8px;
+  box-shadow: 2px 4px 5px #eeeeee;
+  background-color: white;
+  margin: 36px;
+  padding: 20px;
+}
+
+.summary-value {
+  text-align: center;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.summary-comment {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 14px;
+  color: #777777;
+}
+
+.main-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.main-footer-link {
+  display: block;
+  font-size: 14px;
+  padding: 22px 0;
+  color: #3ac700;
+  font-weight: bold;
+}
+
+.main-footer-arrows {
+  margin-top: 22px;
+}
