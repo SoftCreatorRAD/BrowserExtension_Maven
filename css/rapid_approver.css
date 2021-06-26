@@ -1,4 +1,4 @@
-.mavenloan-btn {
+.rapidapprover-btn {
   display: block;
   cursor: pointer;
   margin: 10px 0;
@@ -14,55 +14,55 @@
   font-family: Tahoma, sans-serif;
 }
 
-.mavenloan-btn:hover,
-.mavenloan-btn:focus {
+.rapidapprover-btn:hover,
+.rapidapprover-btn:focus {
   background: rgb(36, 43, 117);
 }
 
-.mavenloan-btn:active {
+.rapidapprover-btn:active {
   background: rgb(39, 49, 160);
 }
 
 
 
-.mavenloan-btn.mavenloan-zillow-main {
+.rapidapprover-btn.rapidapprover-zillow-main {
   margin: 10px;
 }
 
-.mavenloan-btn.mavenloan-zillow-big {
+.rapidapprover-btn.rapidapprover-zillow-big {
   margin: 20px 0 0;
   padding: 10px 0;
 }
 
 
 
-.mavenloan-btn.mavenloan-realtor-main {
+.rapidapprover-btn.rapidapprover-realtor-main {
   margin: 10px;
 }
 
-.mavenloan-btn.mavenloan-realtor-big {
+.rapidapprover-btn.rapidapprover-realtor-big {
   margin: 10px 0 0;
   padding: 10px 0 !important;
 }
 
 
 
-.mavenloan-btn.mavenloan-trulia {
+.rapidapprover-btn.rapidapprover-trulia {
   margin: 0;
 }
 
-.mavenloan-btn.mavenloan-trulia-big {
+.rapidapprover-btn.rapidapprover-trulia-big {
   padding: 8px 0;
   font-size: 1.1em;
 }
 
 
 
-.mavenloan-btn.mavenloan-redfin-main {
+.rapidapprover-btn.rapidapprover-redfin-main {
   margin: 0 15px 10px 15px;
 }
 
-.mavenloan-btn.mavenloan-redfin-big {
+.rapidapprover-btn.rapidapprover-redfin-big {
   padding: 10px;
   font-size: 1.1em;
   margin-top: 25px !important;

@@ -67,7 +67,7 @@ let preloadPaymentDataRealtor = function () {
 
 document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('click', function (evt) {
-    if (evt.target && evt.target.classList.contains('mavenloan-btn')) {
+    if (evt.target && evt.target.classList.contains('rapidapprover-btn')) {
       const addressSel = {
         trulia: '[data-testid="property-street"],[data-testid="property-region"]',
         truliaBig: '[data-testid="home-details-summary-headline"], [data-testid="home-details-summary-city-state"]',
@@ -99,18 +99,18 @@ document.addEventListener('DOMContentLoaded', function () {
         realtorBig: '.slick-track [data-index="0"] img',
       }
 
-      let big = evt.target.classList.contains('mavenloan-' + domain + '-big') ? 'Big' : '';
+      let big = evt.target.classList.contains('rapidapprover-' + domain + '-big') ? 'Big' : '';
       let card = evt.target.closest(cardSel[domain + big]);
 
       let dataObj = {
         source: domain,
         wrapResult: false,
-        actionName: 'losMaven',
+        actionName: 'losRA',
       };
 
       let priceNode = card.querySelector(priceSel[domain + big]);
       if (priceNode) {
-        let priceValue = mavenloanParseNum(priceNode);
+        let priceValue = rapidapproverParseNum(priceNode);
         if (priceValue > 0) {
           dataObj.price = priceValue;
         }
@@ -130,19 +130,19 @@ document.addEventListener('DOMContentLoaded', function () {
       for (let detail of details) {
         let nodeText = detail.textContent.trim();
         if (nodeText.endsWith('bds') || nodeText.endsWith('bd') || nodeText.endsWith('Beds') || nodeText.endsWith('Bed') || nodeText.endsWith('bed')) {
-          let beds = mavenloanParseNum(detail);
+          let beds = rapidapproverParseNum(detail);
           if (beds > 0 && !dataObj.beds) {
             dataObj.beds = beds;
           }
         }
         if (nodeText.endsWith('ba') || nodeText.endsWith('Baths') || nodeText.endsWith('Bath') || nodeText.endsWith('bath')) {
-          let baths = mavenloanParseNum(detail);
+          let baths = rapidapproverParseNum(detail);
           if (baths > 0 && !dataObj.baths) {
             dataObj.baths = baths;
           }
         }
         if (nodeText.endsWith('sqft') || nodeText.endsWith('Sq. Ft.') || nodeText.endsWith('Sq Ft')) {
-          let sqft = mavenloanParseNum(detail);
+          let sqft = rapidapproverParseNum(detail);
           if (sqft > 0 && !dataObj.sqft) {
             dataObj.sqft = sqft;
           }
@@ -172,21 +172,21 @@ document.addEventListener('DOMContentLoaded', function () {
         if (domain === 'zillow') {
           let propertyTaxesNode = document.querySelector('#label-property-tax');
           if (propertyTaxesNode) {
-            let propertyTaxesValue = mavenloanParseNum(propertyTaxesNode);
+            let propertyTaxesValue = rapidapproverParseNum(propertyTaxesNode);
             if (propertyTaxesValue > 0) {
               dataObj.propertyTaxes = propertyTaxesValue;
             }
           }
           let homeInsuranceNode = document.querySelector('#label-home-insurance');
           if (homeInsuranceNode) {
-            let homeInsuranceValue = mavenloanParseNum(homeInsuranceNode);
+            let homeInsuranceValue = rapidapproverParseNum(homeInsuranceNode);
             if (homeInsuranceValue > 0) {
               dataObj.homeInsurance = homeInsuranceValue;
             }
           }
           let hoaNode = document.querySelector('#label-hoa');
           if (hoaNode) {
-            let hoaValue = mavenloanParseNum(hoaNode);
+            let hoaValue = rapidapproverParseNum(hoaNode);
             if (hoaValue > 0) {
               dataObj.hoa = hoaValue;
             }
@@ -209,17 +209,17 @@ document.addEventListener('DOMContentLoaded', function () {
           for (let taxNode of taxDetailsNodes) {
             let nodeTxt = taxNode.textContent.trim().toLowerCase();
             if (nodeTxt.includes('property') && nodeTxt.includes('tax')) {
-              let propertyTaxes = mavenloanParseNum(taxNode);
+              let propertyTaxes = rapidapproverParseNum(taxNode);
               if (propertyTaxes > 0 && !dataObj.propertyTaxes) {
                 dataObj.propertyTaxes = propertyTaxes;
               }
             } else if (nodeTxt.includes('home') && nodeTxt.includes('insurance')) {
-              let homeInsurance = mavenloanParseNum(taxNode);
+              let homeInsurance = rapidapproverParseNum(taxNode);
               if (homeInsurance > 0 && !dataObj.homeInsurance) {
                 dataObj.homeInsurance = homeInsurance;
               }
             } else if (nodeTxt.includes('hoa')) {
-              let hoa = mavenloanParseNum(taxNode);
+              let hoa = rapidapproverParseNum(taxNode);
               if (hoa > 0 && !dataObj.hoa) {
                 dataObj.hoa = hoa;
               }
@@ -265,17 +265,17 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
     for (let card of propertiesParent.querySelectorAll(cardSel.zillow)) {
-      mavenloanCreateBtn('zillow', card, priceSel.zillow, 'zillow-main');
+      rapidapproverCreateBtn('zillow', card, priceSel.zillow, 'zillow-main');
     }
     let mainMutationCallback = function (mutations) {
       for (let mutation of mutations) {
         for (let node of mutation.addedNodes) {
           if (node.nodeType === 1) {
             for (let card of node.querySelectorAll(cardSel.zillow)) {
-              mavenloanCreateBtn('zillow', card, priceSel.zillow, 'zillow-main');
+              rapidapproverCreateBtn('zillow', card, priceSel.zillow, 'zillow-main');
             }
             if (node.querySelector(priceSel.zillow)) {
-              mavenloanCreateBtn('zillow', node.closest(cardSel.zillow), priceSel.zillow, 'zillow-main');
+              rapidapproverCreateBtn('zillow', node.closest(cardSel.zillow), priceSel.zillow, 'zillow-main');
             }
           }
         }
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let detailsPopup = document.querySelector(cardSel.zillowBig);
     let detailsMutationCallback = function (mutations) {
       if (mutations[0].addedNodes.length > 0) {
-        mavenloanCreateBtn('zillow', detailsPopup, priceSel.zillowBig, 'zillow-big');
+        rapidapproverCreateBtn('zillow', detailsPopup, priceSel.zillowBig, 'zillow-big');
       }
     };
     let detailsObserver = new MutationObserver(detailsMutationCallback);
@@ -298,19 +298,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
   else if (domain === 'trulia') {
     for (let card of document.querySelectorAll(cardSel.trulia)) {
-      mavenloanCreateBtn('trulia', card, priceSel.trulia, 'trulia-main');
+      rapidapproverCreateBtn('trulia', card, priceSel.trulia, 'trulia-main');
     }
     let mainMutationCallback = function (mutations) {
       for (let mutation of mutations) {
         for (let node of mutation.removedNodes) {
-          if (node.classList !== undefined && node.classList.contains('mavenloan-btn')) {
+          if (node.classList !== undefined && node.classList.contains('rapidapprover-btn')) {
             mutation.target.appendChild(node);
           }
         }
         for (let node of mutation.addedNodes) {
           if (node.nodeType === 1) {
             for (let card of node.querySelectorAll(cardSel.trulia)) {
-              mavenloanCreateBtn('trulia', card, priceSel.trulia, 'trulia-main');
+              rapidapproverCreateBtn('trulia', card, priceSel.trulia, 'trulia-main');
             }
           }
         }
@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Big card:
     let standalonePage = document.querySelector(cardSel.truliaBig);
     if (standalonePage !== null) {
-      mavenloanCreateBtn('trulia', standalonePage, priceSel.truliaBig, 'trulia-big');
+      rapidapproverCreateBtn('trulia', standalonePage, priceSel.truliaBig, 'trulia-big');
     }
   }
 
@@ -329,19 +329,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
   else if (domain === 'redfin') {
     for (let card of document.querySelectorAll(cardSel.redfin)) {
-      mavenloanCreateBtn('redfin', card, priceSel.redfin, 'redfin-main');
+      rapidapproverCreateBtn('redfin', card, priceSel.redfin, 'redfin-main');
     }
     let mainMutationCallback = function (mutations) {
       for (let mutation of mutations) {
         for (let node of mutation.removedNodes) {
-          if (node.classList !== undefined && node.classList.contains('mavenloan-btn')) {
+          if (node.classList !== undefined && node.classList.contains('rapidapprover-btn')) {
             mutation.target.appendChild(node);
           }
         }
         for (let node of mutation.addedNodes) {
           if (node.nodeType === 1) {
             for (let card of node.querySelectorAll(cardSel.redfin)) {
-              mavenloanCreateBtn('redfin', card, priceSel.redfin, 'redfin-main');
+              rapidapproverCreateBtn('redfin', card, priceSel.redfin, 'redfin-main');
             }
           }
         }
@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Big card:
     let standalonePage = document.querySelector(cardSel.redfinBig);
     if (standalonePage !== null) {
-      mavenloanCreateBtn('redfin', standalonePage, priceSel.redfinBig, 'redfin-big');
+      rapidapproverCreateBtn('redfin', standalonePage, priceSel.redfinBig, 'redfin-big');
     }
   }
 
@@ -360,22 +360,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   else if (domain === 'realtor') {
     for (let card of document.querySelectorAll(cardSel.realtor)) {
-      mavenloanCreateBtn('realtor', card, priceSel.realtor, 'realtor-main');
+      rapidapproverCreateBtn('realtor', card, priceSel.realtor, 'realtor-main');
     }
     let mainMutationCallback = function (mutations) {
       for (let mutation of mutations) {
         for (let node of mutation.removedNodes) {
-          if (node.classList !== undefined && node.classList.contains('mavenloan-btn')) {
+          if (node.classList !== undefined && node.classList.contains('rapidapprover-btn')) {
             mutation.target.appendChild(node);
           }
         }
         for (let node of mutation.addedNodes) {
           if (node.nodeType === 1) {
             for (let card of node.querySelectorAll(cardSel.realtor)) {
-              mavenloanCreateBtn('realtor', card, priceSel.realtor, 'realtor-main');
+              rapidapproverCreateBtn('realtor', card, priceSel.realtor, 'realtor-main');
             }
             if (node.querySelector(priceSel.realtorBig)) {
-              mavenloanCreateBtn('realtor', node.querySelector(cardSel.realtorBig), priceSel.realtorBig, 'realtor-big');
+              rapidapproverCreateBtn('realtor', node.querySelector(cardSel.realtorBig), priceSel.realtorBig, 'realtor-big');
               setTimeout(() => {
                 preloadPaymentDataRealtor();
               }, 500);
@@ -389,13 +389,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Big card:
     let standalonePage = document.querySelector(cardSel.realtorBig);
     if (standalonePage !== null) {
-      mavenloanCreateBtn('realtor', standalonePage, priceSel.realtorBig, 'realtor-big');
+      rapidapproverCreateBtn('realtor', standalonePage, priceSel.realtorBig, 'realtor-big');
     }
   }
 });
 
 
-var mavenloanParseNum = function (el) {
+var rapidapproverParseNum = function (el) {
   let str = el.textContent.trim().replace(/[^.\d]/g, ''); // Keep only digits and period
   while (str.charAt(0) === '.') {
     str = str.slice(1);
@@ -408,27 +408,27 @@ var mavenloanParseNum = function (el) {
 }
 
 
-var mavenloanCreateBtn = function (website, currentCard, currentPriceSel, extra) {
+var rapidapproverCreateBtn = function (website, currentCard, currentPriceSel, extra) {
   if (currentCard === null) {
     return;
   }
-  if (currentCard.querySelector('a.mavenloan-btn') !== null) {
+  if (currentCard.querySelector('a.rapidapprover-btn') !== null) {
     return;
   }
   let price = currentCard.querySelector(currentPriceSel);
   if (price === null) {
     return;
   }
-  price = mavenloanParseNum(price);
+  price = rapidapproverParseNum(price);
   if (price < 10000) {
     return;
   }
 
   let btn = document.createElement('a');
-  btn.innerHTML = 'Add to Maven \u{27A0}\u{1F4D1}'; //unicode-table.com/en/emoji
-  btn.classList.add('mavenloan-btn');
-  btn.classList.add('mavenloan-' + website);
-  btn.classList.add('mavenloan-' + extra);
+  btn.innerHTML = 'Add to Rapid Approver \u{27A0}\u{1F4D1}'; //unicode-table.com/en/emoji
+  btn.classList.add('rapidapprover-btn');
+  btn.classList.add('rapidapprover-' + website);
+  btn.classList.add('rapidapprover-' + extra);
 
   const bigBtnContainerSel = {  // big button container != currentCard  (exclude trulia)
     truliaBig: '[data-testid="home-details-summary-container"]',

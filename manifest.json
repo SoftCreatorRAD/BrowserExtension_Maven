@@ -1,8 +1,8 @@
 {
-  "version": "0.5.0",
+  "version": "0.5.1",
   "name": "Rapid Approver",
-  "description": "Maven Analyzer transfer peroperty listings from Zillow/Trulia/Realtor/Redfin to Maven for further analysis and pre-approval.",
-  "homepage_url": "https://maven.loan",
+  "description": "Transfer peroperty listings from Zillow/Trulia/Realtor/Redfin to Rapid Approver for further analysis and pre-approval.",
+  "homepage_url": "https://RapidApprover.com",
   "icons": {
     "16": "img/icon-16.png",
     "19": "img/icon-19.png",
@@ -26,8 +26,8 @@
         "https://www.redfin.com/*",
         "https://www.redfin.ca/*"
       ],
-      "css": ["css/mavenloan.css"],
-      "js": ["js/mavenloan.js"],
+      "css": ["css/rapid_approver.css"],
+      "js": ["js/rapid_approver.js"],
       "run_at": "document_start"
     }
   ],
@@ -38,7 +38,7 @@
       "38": "img/icon-38.png",
       "48": "img/icon-48.png"
     },
-    "default_title": "Maven Analyzer",
+    "default_title": "Rapid Approver",
     "default_popup": "popup/popup.html"
   },
   "manifest_version": 2
