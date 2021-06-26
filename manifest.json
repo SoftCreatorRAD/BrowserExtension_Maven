@@ -11,7 +11,8 @@
     "128": "img/icon-128.png"
   },
   "permissions": [
-    "http://127.0.0.1/"
+    "http://127.0.0.1/",
+    "https://rapidapprover.com"
   ],
   "background": {
     "scripts": ["js/background.js"],
