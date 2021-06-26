@@ -168,84 +168,110 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       dataObj.picturePath = picturePath;
 
-      if (big) {
-        if (domain === 'zillow') {
-          let propertyTaxesNode = document.querySelector('#label-property-tax');
-          if (propertyTaxesNode) {
-            let propertyTaxesValue = rapidapproverParseNum(propertyTaxesNode);
-            if (propertyTaxesValue > 0) {
-              dataObj.propertyTaxes = propertyTaxesValue;
-            }
+      if (domain === 'zillow' && big) {
+        let propertyTaxesNode = document.querySelector('#label-property-tax');
+        if (propertyTaxesNode) {
+          let propertyTaxesValue = rapidapproverParseNum(propertyTaxesNode);
+          if (propertyTaxesValue > 0) {
+            dataObj.propertyTaxes = propertyTaxesValue;
           }
-          let homeInsuranceNode = document.querySelector('#label-home-insurance');
-          if (homeInsuranceNode) {
-            let homeInsuranceValue = rapidapproverParseNum(homeInsuranceNode);
-            if (homeInsuranceValue > 0) {
-              dataObj.homeInsurance = homeInsuranceValue;
-            }
+        }
+        let homeInsuranceNode = document.querySelector('#label-home-insurance');
+        if (homeInsuranceNode) {
+          let homeInsuranceValue = rapidapproverParseNum(homeInsuranceNode);
+          if (homeInsuranceValue > 0) {
+            dataObj.homeInsurance = homeInsuranceValue;
           }
-          let hoaNode = document.querySelector('#label-hoa');
-          if (hoaNode) {
-            let hoaValue = rapidapproverParseNum(hoaNode);
-            if (hoaValue > 0) {
-              dataObj.hoa = hoaValue;
-            }
+        }
+        let hoaNode = document.querySelector('#label-hoa');
+        if (hoaNode) {
+          let hoaValue = rapidapproverParseNum(hoaNode);
+          if (hoaValue > 0) {
+            dataObj.hoa = hoaValue;
           }
+        }
 
-          let propertyTypeNodes = document.querySelectorAll('.ds-home-fact-list > li');
-          for (let typeNode of propertyTypeNodes) {
-            if (!dataObj.propertyType && typeNode.textContent.indexOf('Type:') !== -1) {
-              dataObj.propertyType = typeNode.textContent.split('Type:')[1];
-            }
+        let propertyTypeNodes = document.querySelectorAll('.ds-home-fact-list > li');
+        for (let typeNode of propertyTypeNodes) {
+          if (!dataObj.propertyType && typeNode.textContent.indexOf('Type:') !== -1) {
+            dataObj.propertyType = typeNode.textContent.split('Type:')[1];
           }
+        }
 
-        } else {
-          let taxDetailsSel = {
-            truliaBig: '[data-testid="affordability-table"] .Grid__CellBox-sc-144isrp-0',
-            redfinBig: '.CalculatorSummary > .colorBarLegend > div',
-            realtorBig: '#content-payment_calculator .list-unstyled>li',
-          }
-          let taxDetailsNodes = document.querySelectorAll(taxDetailsSel[domain + big]);
-          for (let taxNode of taxDetailsNodes) {
-            let nodeTxt = taxNode.textContent.trim().toLowerCase();
-            if (nodeTxt.includes('property') && nodeTxt.includes('tax')) {
-              let propertyTaxes = rapidapproverParseNum(taxNode);
+      } else if (domain === 'realtor' && big) {
+
+        let uls = document.querySelectorAll('#content-payment_calculator ul');
+        if (uls[0] && uls[1]) {
+          let list0 = uls[0].querySelectorAll('li');
+          let list1 = uls[1].querySelectorAll('li');
+
+          for (let i = 0; i < list0.length; i++) {
+            let liText = list0[i].textContent.toLowerCase();
+            if (liText.includes('property') && liText.includes('tax')) {
+              let propertyTaxes = rapidapproverParseNum(list1[i]);
               if (propertyTaxes > 0 && !dataObj.propertyTaxes) {
                 dataObj.propertyTaxes = propertyTaxes;
               }
-            } else if (nodeTxt.includes('home') && nodeTxt.includes('insurance')) {
-              let homeInsurance = rapidapproverParseNum(taxNode);
+            } else if (liText.includes('home') && liText.includes('insurance')) {
+              let homeInsurance = rapidapproverParseNum(list1[i]);
               if (homeInsurance > 0 && !dataObj.homeInsurance) {
                 dataObj.homeInsurance = homeInsurance;
               }
-            } else if (nodeTxt.includes('hoa')) {
-              let hoa = rapidapproverParseNum(taxNode);
+            } else if (liText.includes('hoa')) {
+              let hoa = rapidapproverParseNum(list1[i]);
               if (hoa > 0 && !dataObj.hoa) {
                 dataObj.hoa = hoa;
               }
             }
           }
+        }
 
-          if (domain === 'redfin') {
-            let keyDetails = document.querySelectorAll('#house-info .keyDetail');
-            for (const keyDetail of keyDetails) {
-              if (!dataObj.propertyType && keyDetail.textContent.indexOf('Property Type') !== -1) {
-                dataObj.propertyType = keyDetail.textContent.replace('Property Type', '');
-              }
+      } else if (big) {
+        let taxDetailsSel = {
+          truliaBig: '[data-testid="affordability-table"] .Grid__CellBox-sc-144isrp-0',
+          redfinBig: '.CalculatorSummary > .colorBarLegend > div',
+          // realtorBig: '#content-payment_calculator .list-unstyled>li',
+        }
+        let taxDetailsNodes = document.querySelectorAll(taxDetailsSel[domain + big]);
+        for (let taxNode of taxDetailsNodes) {
+          let nodeTxt = taxNode.textContent.trim().toLowerCase();
+          if (nodeTxt.includes('property') && nodeTxt.includes('tax')) {
+            let propertyTaxes = rapidapproverParseNum(taxNode);
+            if (propertyTaxes > 0 && !dataObj.propertyTaxes) {
+              dataObj.propertyTaxes = propertyTaxes;
             }
-          } else if (domain === 'realtor') {
-            let propItems = document.querySelectorAll('[data-testid="listing-indicator"]>li');
-            for (const propItem of propItems) {
-              if (!dataObj.propertyType && propItem.textContent.indexOf('Property Type') !== -1) {
-                dataObj.propertyType = propItem.textContent.replace('Property Type', '');
-              }
+          } else if (nodeTxt.includes('home') && nodeTxt.includes('insurance')) {
+            let homeInsurance = rapidapproverParseNum(taxNode);
+            if (homeInsurance > 0 && !dataObj.homeInsurance) {
+              dataObj.homeInsurance = homeInsurance;
             }
-          } else if (domain === 'trulia') {
-            let propItems = document.querySelectorAll('[data-testid="structured-amenities-table-category"] [class*="Feature__FeatureListItem-sc-"]');
-            for (const propItem of propItems) {
-              if (!dataObj.propertyType && propItem.textContent.indexOf('Property Type:') !== -1) {
-                dataObj.propertyType = propItem.textContent.replace('Property Type:', '').replace(/"/g,'').trim();
-              }
+          } else if (nodeTxt.includes('hoa')) {
+            let hoa = rapidapproverParseNum(taxNode);
+            if (hoa > 0 && !dataObj.hoa) {
+              dataObj.hoa = hoa;
+            }
+          }
+        }
+
+        if (domain === 'redfin' && big) {
+          let keyDetails = document.querySelectorAll('#house-info .keyDetail');
+          for (const keyDetail of keyDetails) {
+            if (!dataObj.propertyType && keyDetail.textContent.indexOf('Property Type') !== -1) {
+              dataObj.propertyType = keyDetail.textContent.replace('Property Type', '');
+            }
+          }
+        } else if (domain === 'realtor' && big) {
+          let propItems = document.querySelectorAll('[data-testid="listing-indicator"]>li');
+          for (const propItem of propItems) {
+            if (!dataObj.propertyType && propItem.textContent.indexOf('Property Type') !== -1) {
+              dataObj.propertyType = propItem.textContent.replace('Property Type', '');
+            }
+          }
+        } else if (domain === 'trulia' && big) {
+          let propItems = document.querySelectorAll('[data-testid="structured-amenities-table-category"] [class*="Feature__FeatureListItem-sc-"]');
+          for (const propItem of propItems) {
+            if (!dataObj.propertyType && propItem.textContent.indexOf('Property Type:') !== -1) {
+              dataObj.propertyType = propItem.textContent.replace('Property Type:', '').replace(/"/g, '').trim();
             }
           }
         }
