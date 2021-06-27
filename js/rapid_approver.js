@@ -42,25 +42,32 @@ window.addEventListener('load', function () {
   } else if (domain === 'realtor') {
     setTimeout(() => {
       preloadPaymentDataRealtor();
-    }, 500);
+    }, 100);
   }
 });
 
-// line 200
+
 let preloadPaymentDataRealtor = function () {
+  let offset = {
+    x: window.pageXOffset,
+    y: window.pageYOffset
+  }
   let btn = document.querySelector('[data-label="Monthly Payment"]>[data-testid="section-toggle"]');
-  if (btn) {
-    let offset = {
-      x: window.pageXOffset,
-      y: window.pageYOffset
-    }
-    btn.scrollIntoView(true);
+  let btn2 = document.querySelector('[data-label="Property History"]');
+  let btn3 = document.querySelector('[data-label="Property Details"]');
+  let btn4 = document.querySelector('[data-label="Open Houses"]');
+  let btnToScroll = btn || btn2 || btn3 || btn4;
+  if (btnToScroll) {
+    btnToScroll.scrollIntoView(true);
     setTimeout(() => {
-      btn.click();
-      setTimeout(() => {
-        window.scrollTo(offset.x, offset.y);
-      }, 50);
-    }, 50);
+      let btnToClick = document.querySelector('[data-label="Monthly Payment"]>[data-testid="section-toggle"]');
+      if (btnToClick) {
+        btnToClick.click();
+        setTimeout(() => {
+          window.scrollTo(offset.x, offset.y);
+        }, 100);
+      }
+    }, 200);
   }
 }
 
@@ -69,11 +76,13 @@ let preloadPaymentDataRealtor = function () {
 document.addEventListener('DOMContentLoaded', function () {
 
   document.addEventListener('click', function (evt) {
-    let dataObj = getParsed(evt.target, cardSel, priceSel);
-    if (dataObj) {
-      let json = JSON.stringify(dataObj);
-      chrome.runtime.sendMessage(json);
-      console.log(JSON.stringify(dataObj, null, '  '));
+    if (evt.target && evt.target.classList && evt.target.classList.contains('rapidapprover-btn')) {
+      let dataObj = getParsed(evt.target, cardSel, priceSel, domain);
+      if (dataObj) {
+        let json = JSON.stringify(dataObj);
+        chrome.runtime.sendMessage(json);
+        console.log(JSON.stringify(dataObj, null, '  '));
+      }
     }
   });
 
@@ -184,18 +193,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     let mainMutationCallback = function (mutations) {
       for (let mutation of mutations) {
-        for (let node of mutation.removedNodes) {
-          if (node.classList !== undefined && node.classList.contains('rapidapprover-btn')) {
-            mutation.target.appendChild(node);
+        for (let removedNode of mutation.removedNodes) {
+          if (removedNode.classList !== undefined && removedNode.classList.contains('rapidapprover-btn')) {
+            mutation.target.appendChild(removedNode);
           }
         }
-        for (let node of mutation.addedNodes) {
-          if (node.nodeType === 1) {
-            for (let card of node.querySelectorAll(cardSel.realtor)) {
+        for (let addedNode of mutation.addedNodes) {
+          if (addedNode.nodeType === 1) {
+            for (let card of addedNode.querySelectorAll(cardSel.realtor)) {
               rapidapproverCreateBtn('realtor', card, priceSel.realtor, 'realtor-main');
             }
-            if (node.querySelector(priceSel.realtorBig)) {
-              rapidapproverCreateBtn('realtor', node.querySelector(cardSel.realtorBig), priceSel.realtorBig, 'realtor-big');
+            if (addedNode.querySelector(priceSel.realtorBig)) {
+              rapidapproverCreateBtn('realtor', addedNode.querySelector(cardSel.realtorBig), priceSel.realtorBig, 'realtor-big');
               setTimeout(() => {
                 preloadPaymentDataRealtor();
               }, 500);
