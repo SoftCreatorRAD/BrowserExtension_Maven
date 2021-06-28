@@ -73,15 +73,37 @@ let preloadPaymentDataRealtor = function () {
 
 
 
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+  if (msg.cmd === 'parseBigCard') {
+    setTimeout(() => {
+      document.querySelector('a.rapidapprover-btn').click();
+    }, 200);
+  }
+});
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
 
   document.addEventListener('click', function (evt) {
-    if (evt.target && evt.target.classList && evt.target.classList.contains('rapidapprover-btn')) {
-      let dataObj = getParsed(evt.target, cardSel, priceSel, domain);
-      if (dataObj) {
+    let btn = evt.target;
+    if (btn && btn.classList && btn.classList.contains('rapidapprover-btn')) {
+      let isBigCard = btn.classList.contains('rapidapprover-' + domain + '-big') ? true : false;
+
+      if (isBigCard) {
+
+        let dataObj = getParsed(btn, cardSel, priceSel, domain);
         let json = JSON.stringify(dataObj);
-        chrome.runtime.sendMessage(json);
+        chrome.runtime.sendMessage({json: json});
         console.log(JSON.stringify(dataObj, null, '  '));
+
+      } else if (domain === 'redfin') {
+
+        let bigURL = btn.closest(cardSel[domain]).querySelector('.bottomV2>a').href;
+        if (bigURL) {
+          chrome.runtime.sendMessage({bigURL: bigURL});
+        }
+
       }
     }
   });
