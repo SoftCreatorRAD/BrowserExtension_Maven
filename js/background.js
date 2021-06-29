@@ -18,8 +18,8 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 
     if (loadableIndex !== -1) {
       loadableTabs.splice(loadableIndex, 1);
+      chrome.tabs.remove(tabId);
     }
-    chrome.tabs.remove(tabId);
 
   } else if (msg.bigCardUrl) {
 
