@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   } else if (msg.bigCardUrl) {
 
     let isActive = msg.isRealtor || msg.isTrulia ? true : false;
-    chrome.tabs.create({url: msg.bigCardUrl, pinned: true, active: isActive}, function (tab) {
+    chrome.tabs.create({url: msg.bigCardUrl, pinned: !isActive, active: isActive}, function (tab) {
       loadableTabs.push(tab.id);
     });
 
