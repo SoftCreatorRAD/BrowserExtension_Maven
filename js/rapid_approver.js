@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let dataObj = getParsed(btn, cardSel, priceSel, domain);
         let json = JSON.stringify(dataObj);
-        alert(JSON.stringify(dataObj, null, '  '));
+        //alert(JSON.stringify(dataObj, null, '  '));
         chrome.runtime.sendMessage({json: json});
         console.log(JSON.stringify(dataObj, null, '  '));
 

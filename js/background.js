@@ -1,5 +1,5 @@
 let loadableTabs = [];
-
+let prevActiveTab = null;
 
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   let tabId = sender.tab.id;
@@ -19,10 +19,12 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     if (loadableIndex !== -1) {
       loadableTabs.splice(loadableIndex, 1);
       chrome.tabs.remove(tabId);
+      chrome.tabs.update(prevActiveTab, {active: true});
     }
 
   } else if (msg.bigCardUrl) {
 
+    prevActiveTab = tabId;
     let isActive = msg.isRealtor || msg.isTrulia ? true : false;
     chrome.tabs.create({url: msg.bigCardUrl, pinned: !isActive, active: isActive}, function (tab) {
       loadableTabs.push(tab.id);
