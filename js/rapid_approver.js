@@ -15,7 +15,7 @@ const priceSel = {
   trulia: '[data-testid="property-price"]',
   truliaBig: '[data-testid="home-details-sm-lg-xl-price-details"]>h3',
   zillow: '.list-card-price',
-  zillowBig: '.ds-home-details-chip .ds-summary-row > span:first-child, .ds-chip div[class*="Flex-"]>div[class*="Flex-"]>span[class*="Text-"]',
+  zillowBig: '.ds-home-details-chip .ds-summary-row > span:first-child, .ds-chip div[class*="Flex-"]>div[class*="Flex-"]:first-child>*',
   redfin: '.homecardV2Price',
   redfinBig: '.price-section',
   realtor: '[data-label="pc-price"]',
@@ -36,6 +36,13 @@ window.addEventListener('load', function () {
         preloadContainer.scrollIntoView(true);
         setTimeout(function () {
           window.scrollTo(offset.x, offset.y);
+          chrome.runtime.sendMessage({checkIsAutoClosing: true}, function (response) {
+            if (response.isAutoClosingTab) {
+              setTimeout(() => {
+                document.querySelector('a.rapidapprover-btn').click();
+              }, 700);
+            }
+          });
         }, 20);
       }
     }, 0);
@@ -65,6 +72,13 @@ let preloadPaymentDataRealtor = function () {
         btnToClick.click();
         setTimeout(() => {
           window.scrollTo(offset.x, offset.y);
+          chrome.runtime.sendMessage({checkIsAutoClosing: true}, function (response) {
+            if (response.isAutoClosingTab) {
+              setTimeout(() => {
+                document.querySelector('a.rapidapprover-btn').click();
+              }, 500);
+            }
+          });
         }, 100);
       }
     }, 200);
@@ -73,11 +87,13 @@ let preloadPaymentDataRealtor = function () {
 
 
 
-chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (msg) {
   if (msg.cmd === 'parseBigCard') {
-    setTimeout(() => {
-      document.querySelector('a.rapidapprover-btn').click();
-    }, 200);
+    if (domain === 'redfin' || domain === 'zillow') {
+      setTimeout(() => {
+        document.querySelector('a.rapidapprover-btn').click();
+      }, 200);
+    }
   }
 });
 
@@ -99,9 +115,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
       } else if (domain === 'redfin') {
 
-        let bigURL = btn.closest(cardSel[domain]).querySelector('.bottomV2>a').href;
-        if (bigURL) {
-          chrome.runtime.sendMessage({bigURL: bigURL});
+        let bigCardUrl = btn.closest(cardSel[domain]).querySelector('.bottomV2>a').href;
+        if (bigCardUrl) {
+          chrome.runtime.sendMessage({bigCardUrl: bigCardUrl});
+        }
+
+      } else if (domain === 'zillow') {
+
+        let bigCardUrl = btn.closest(cardSel[domain]).querySelector('a.list-card-link').href;
+        if (bigCardUrl) {
+          chrome.runtime.sendMessage({bigCardUrl: bigCardUrl});
+        }
+
+      } else if (domain === 'realtor') {
+
+        let bigCardUrl = btn.closest(cardSel[domain]).querySelector('a[data-testid="property-anchor"]').href;
+        if (bigCardUrl) {
+          chrome.runtime.sendMessage({bigCardUrl: bigCardUrl, isRealtor: true});
+        }
+
+      } else if (domain === 'trulia') {
+
+        let bigCardUrl = btn.closest(cardSel[domain]).querySelector('a[data-testid="property-card-link"]').href;
+        if (bigCardUrl) {
+          chrome.runtime.sendMessage({bigCardUrl: bigCardUrl, isTrulia: true});
         }
 
       }
