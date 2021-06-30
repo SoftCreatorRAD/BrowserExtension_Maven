@@ -11,6 +11,7 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 
   } else if (msg.json) {
 
+    console.log(JSON.stringify(JSON.parse(msg.json), null, '  '));
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://127.0.0.1/');
     xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8');

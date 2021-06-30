@@ -76,7 +76,7 @@ let preloadPaymentDataRealtor = function () {
             if (response.isAutoClosingTab) {
               setTimeout(() => {
                 document.querySelector('a.rapidapprover-btn').click();
-              }, 500);
+              }, 1000);
             }
           });
         }, 100);

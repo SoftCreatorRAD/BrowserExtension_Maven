@@ -138,7 +138,7 @@ function getParsed(targetElement, cardSel, priceSel, domain) {
     let taxDetailsSelectorRealtorBig = '#content-payment_calculator .list-unstyled>li';
     let taxDetailsNodes = document.querySelectorAll(taxDetailsSelectorRealtorBig);
 
-    if (taxDetailsNodes) {
+    if (taxDetailsNodes.length) {
       for (let taxNode of taxDetailsNodes) {
         let nodeTxt = taxNode.textContent.trim().toLowerCase();
         if (nodeTxt.includes('property') && nodeTxt.includes('tax')) {
