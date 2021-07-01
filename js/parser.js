@@ -13,7 +13,7 @@ function getParsed(targetElement, cardSel, priceSel, domain) {
     zillow: 'address.list-card-addr',
     zillowBig: '#ds-chip-property-address',
     redfin: '.homeAddressV2',
-    redfinBig: 'h1.address',
+    redfinBig: '.homeAddress-variant', // 'h1.address',
     realtor: '[data-label="pc-address"]',
     realtorBig: '.address-value', //'[data-testid="address-section"]',
   }
