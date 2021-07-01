@@ -21,7 +21,7 @@ function getParsed(targetElement, cardSel, priceSel, domain) {
     trulia: '[r="xxs"]',
     truliaBig: '[data-testid="facts-list"] > li',
     zillow: '.list-card-details > li',
-    zillowBig: '.ds-bed-bath-living-area-container > *',
+    zillowBig: '.ds-bed-bath-living-area-container > *, .ds-chip>span>div>div:first-child>*',
     redfin: '.HomeStatsV2 > div',
     redfinBig: '.home-main-stats-variant > div',
     realtor: '.property-meta > li',
