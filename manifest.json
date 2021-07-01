@@ -1,5 +1,5 @@
 {
-  "version": "0.6.2",
+  "version": "0.6.3",
   "name": "Rapid Approver",
   "description": "Transfer peroperty listings from Zillow/Trulia/Realtor/Redfin to Rapid Approver for further analysis and pre-approval.",
   "homepage_url": "https://RapidApprover.com",
@@ -11,6 +11,11 @@
     "128": "img/icon-128.png"
   },
   "permissions": [
+    "https://www.zillow.com/",
+    "https://www.realtor.com/",
+    "https://www.trulia.com/",
+    "https://www.redfin.com/",
+    "https://www.redfin.ca/",
     "http://127.0.0.1/",
     "https://rapidapprover.com/"
   ],

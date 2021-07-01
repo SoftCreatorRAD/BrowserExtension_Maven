@@ -27,31 +27,41 @@ const priceSel = {
 window.addEventListener('load', function () {
   if (domain === 'trulia') {
     setTimeout(() => {
-      let preloadContainer = document.querySelector('[data-testid="affordability-placeholder"]');
-      if (preloadContainer) {
-        let offset = {
-          x: window.pageXOffset,
-          y: window.pageYOffset
-        }
-        preloadContainer.scrollIntoView(true);
-        setTimeout(function () {
-          window.scrollTo(offset.x, offset.y);
-          chrome.runtime.sendMessage({checkIsAutoClosing: true}, function (response) {
-            if (response.isAutoClosingTab) {
-              setTimeout(() => {
-                document.querySelector('a.rapidapprover-btn').click();
-              }, 700);
-            }
-          });
-        }, 20);
-      }
+      chrome.runtime.sendMessage({activateTab: true}, function (response) {
+        preloadPaymentDataTrulia();
+      });
     }, 0);
   } else if (domain === 'realtor') {
     setTimeout(() => {
-      preloadPaymentDataRealtor();
+      chrome.runtime.sendMessage({activateTab: true}, function (response) {
+        preloadPaymentDataRealtor();
+      });
     }, 100);
   }
 });
+
+
+
+let preloadPaymentDataTrulia = function () {
+  let preloadContainer = document.querySelector('[data-testid="affordability-placeholder"]');
+  if (preloadContainer) {
+    let offset = {
+      x: window.pageXOffset,
+      y: window.pageYOffset
+    }
+    preloadContainer.scrollIntoView(true);
+    setTimeout(function () {
+      window.scrollTo(offset.x, offset.y);
+      chrome.runtime.sendMessage({checkIsAutoClosing: true}, function (response) {
+        if (response.isAutoClosingTab) {
+          setTimeout(() => {
+            document.querySelector('a.rapidapprover-btn').click();
+          }, 700);
+        }
+      });
+    }, 20);
+  }
+}
 
 
 let preloadPaymentDataRealtor = function () {

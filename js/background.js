@@ -5,8 +5,20 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
   let tabId = sender.tab.id;
   let loadableIndex = loadableTabs.indexOf(tabId);
 
-  if (msg.checkIsAutoClosing && loadableIndex !== -1) {
+  if (msg.activateTab) {
 
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      var currTab = tabs[0];
+      if (currTab && loadableTabs.indexOf(currTab.id) === -1) {
+        prevActiveTab = currTab.id;
+      }
+    });
+    chrome.tabs.update(tabId, {active: true});
+    sendResponse({ok: true});
+
+  } else if (msg.checkIsAutoClosing && loadableIndex !== -1) {
+
+    chrome.tabs.update(prevActiveTab, {active: true});
     sendResponse({isAutoClosingTab: true});
 
   } else if (msg.json) {
@@ -20,15 +32,14 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
     if (loadableIndex !== -1) {
       loadableTabs.splice(loadableIndex, 1);
       chrome.tabs.remove(tabId);
-      chrome.tabs.update(prevActiveTab, {active: true});
     }
 
   } else if (msg.bigCardUrl) {
 
     prevActiveTab = tabId;
-    let isActive = msg.isRealtor || msg.isTrulia ? true : false;
-    chrome.tabs.create({url: msg.bigCardUrl, pinned: !isActive, active: isActive}, function (tab) {
+    chrome.tabs.create({url: msg.bigCardUrl, pinned: true, active: false}, function (tab) {
       loadableTabs.push(tab.id);
+      chrome.tabs.insertCSS(tab.id, {code: 'body {opacity:0 !important}'});
     });
 
   }
